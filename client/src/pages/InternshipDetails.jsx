@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import api from "../api/api";
+import localInternships from "../data/Internships";
 
 const InternshipDetails = () => {
   const { id } = useParams();
@@ -8,17 +9,27 @@ const InternshipDetails = () => {
   const [internship, setInternship] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [application, setApplication] = useState({
+    name: "",
+    email: "",
+    resume: "",
+  });
 
   useEffect(() => {
     const fetchInternship = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/api/internships/${id}`
-        );
+        const res = await api.get(`/internships/${id}`);
 
         setInternship(res.data);
       } catch (error) {
         console.error(error);
+        const savedInternships = JSON.parse(
+          localStorage.getItem("inhubInternships") || "null"
+        );
+        const localInternship = (savedInternships || localInternships).find(
+          (item) => String(item.id) === String(id)
+        );
+        setInternship(localInternship || null);
       } finally {
         setLoading(false);
       }
@@ -166,34 +177,67 @@ const InternshipDetails = () => {
 
             </div>
 
-            <div className="flex justify-center gap-4 mt-8">
-
-              <button
-                onClick={() => setShowModal(false)}
-                className="px-6 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
-              >
-                Cancel
-              </button>
-
-              <button
-                onClick={() => {
-                  setShowModal(false);
-
-                  if (
-                    internship.applyLink &&
-                    internship.applyLink.trim() !== ""
-                  ) {
-                    window.open(internship.applyLink, "_blank");
-                  } else {
-                    alert("Apply link is not available.");
-                  }
-                }}
-                className="px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 transition"
-              >
-                Apply
-              </button>
-
-            </div>
+            <form
+              className="mt-8 space-y-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const savedApplications = JSON.parse(
+                  localStorage.getItem("inhubApplications") || "[]"
+                );
+                savedApplications.push({
+                  ...application,
+                  internshipId: internship._id || internship.id,
+                  role: internship.role,
+                  company: internship.company,
+                  submittedAt: new Date().toISOString(),
+                });
+                localStorage.setItem(
+                  "inhubApplications",
+                  JSON.stringify(savedApplications)
+                );
+                setShowModal(false);
+                alert("Application submitted successfully through InHub.");
+              }}
+            >
+              <input
+                required
+                placeholder="Your full name"
+                value={application.name}
+                onChange={(e) => setApplication({ ...application, name: e.target.value })}
+                className="w-full rounded-lg bg-gray-800 p-3 text-white outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                required
+                type="email"
+                placeholder="Your email address"
+                value={application.email}
+                onChange={(e) => setApplication({ ...application, email: e.target.value })}
+                className="w-full rounded-lg bg-gray-800 p-3 text-white outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                required
+                type="url"
+                placeholder="Resume link (Google Drive, LinkedIn, etc.)"
+                value={application.resume}
+                onChange={(e) => setApplication({ ...application, resume: e.target.value })}
+                className="w-full rounded-lg bg-gray-800 p-3 text-white outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <div className="flex justify-center gap-4 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="px-6 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 transition"
+                >
+                  Submit Application
+                </button>
+              </div>
+            </form>
 
           </div>
 

@@ -1,81 +1,80 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
+const emptyForm = {
+  company: "",
+  role: "",
+  location: "",
+  stipend: "",
+  duration: "",
+  mode: "Remote",
+  skills: "",
+  applyLink: "",
+};
+
+const getFormData = (internship) => {
+  if (!internship) {
+    return emptyForm;
+  }
+
+  return {
+    company: internship.company || "",
+    role: internship.role || "",
+    location: internship.location || "",
+    stipend: internship.stipend || "",
+    duration: internship.duration || "",
+    mode: internship.mode || "Remote",
+    skills: Array.isArray(internship.skills)
+      ? internship.skills.join(", ")
+      : internship.skills || "",
+    applyLink: internship.applyLink || "",
+  };
+};
 
 function InternshipForm({ onSubmit, editingInternship }) {
-  const [formData, setFormData] = useState({
-    company: "",
-    role: "",
-    location: "",
-    stipend: "",
-    duration: "",
-    mode: "Remote",
-    skills: "",
-    applyLink: "",
-  });
+  const [formData, setFormData] = useState(
+    getFormData(editingInternship)
+  );
 
+  // IMPORTANT:
+  // Load existing internship whenever Edit is clicked
   useEffect(() => {
-    if (editingInternship) {
-      setFormData({
-        company: editingInternship.company || "",
-        role: editingInternship.role || "",
-        location: editingInternship.location || "",
-        stipend: editingInternship.stipend || "",
-        duration: editingInternship.duration || "",
-        mode: editingInternship.mode || "Remote",
-        skills: editingInternship.skills
-          ? editingInternship.skills.join(", ")
-          : "",
-        applyLink: editingInternship.applyLink || "",
-      });
-    } else {
-      setFormData({
-        company: "",
-        role: "",
-        location: "",
-        stipend: "",
-        duration: "",
-        mode: "Remote",
-        skills: "",
-        applyLink: "",
-      });
-    }
+    setFormData(getFormData(editingInternship));
   }, [editingInternship]);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    onSubmit({
+    const data = {
       ...formData,
       skills: formData.skills
         .split(",")
         .map((skill) => skill.trim())
         .filter((skill) => skill !== ""),
-    });
+    };
 
+    await onSubmit(data);
+
+    // Clear form only when adding a NEW internship
     if (!editingInternship) {
-      setFormData({
-        company: "",
-        role: "",
-        location: "",
-        stipend: "",
-        duration: "",
-        mode: "Remote",
-        skills: "",
-        applyLink: "",
-      });
+      setFormData(emptyForm);
     }
   };
 
   return (
     <div className="bg-gray-900 rounded-xl p-6 mb-8">
       <h2 className="text-2xl font-bold mb-6">
-        {editingInternship ? "Edit Internship" : "Add Internship"}
+        {editingInternship
+          ? "Edit Internship"
+          : "Add Internship"}
       </h2>
 
       <form
@@ -166,7 +165,9 @@ function InternshipForm({ onSubmit, editingInternship }) {
           type="submit"
           className="bg-blue-600 hover:bg-blue-700 py-3 rounded font-semibold md:col-span-2 transition"
         >
-          {editingInternship ? "Update Internship" : "Save Internship"}
+          {editingInternship
+            ? "Update Internship"
+            : "Save Internship"}
         </button>
       </form>
     </div>

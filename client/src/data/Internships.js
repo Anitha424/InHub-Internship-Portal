@@ -8,6 +8,7 @@ const internships = [
     duration: "6 Months",
     mode: "Remote",
     skills: ["React", "Node.js", "MongoDB"],
+    applyLink: "https://www.google.com/about/careers/applications/",
   },
   {
     id: 2,
@@ -18,6 +19,7 @@ const internships = [
     duration: "3 Months",
     mode: "Hybrid",
     skills: ["React", "JavaScript", "Tailwind"],
+    applyLink: "https://www.google.com/about/careers/applications/",
   },
   {
     id: 3,
@@ -28,6 +30,7 @@ const internships = [
     duration: "6 Months",
     mode: "On-site",
     skills: ["C#", ".NET", "Azure"],
+    applyLink: "https://jobs.careers.microsoft.com/global/en/search?q=intern",
   },
   {
     id: 4,
@@ -38,6 +41,7 @@ const internships = [
     duration: "6 Months",
     mode: "Hybrid",
     skills: ["Node.js", "Express", "AWS"],
+    applyLink: "https://www.amazon.jobs/en/teams/internships-for-students",
   },
   {
     id: 5,
@@ -48,6 +52,7 @@ const internships = [
     duration: "6 Months",
     mode: "Remote",
     skills: ["Python", "LLM", "RAG"],
+    applyLink: "https://openai.com/careers/search/",
   },
   {
     id: 6,
@@ -58,6 +63,7 @@ const internships = [
     duration: "4 Months",
     mode: "On-site",
     skills: ["MongoDB", "Express", "React", "Node"],
+    applyLink: "https://www.zoho.com/careers/",
   },
 ];
 

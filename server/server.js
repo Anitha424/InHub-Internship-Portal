@@ -2,13 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
-const connectDB = require("./config/db");
-const internshipRoutes = require("./routes/internshipRoutes");
-
 dotenv.config();
 
-// Connect to MongoDB
-connectDB();
+const connectDB = require("./config/db");
+const internshipRoutes = require("./routes/internshipRoutes");
 
 const app = express();
 
@@ -39,9 +36,20 @@ app.get("/test", (req, res) => {
   });
 });
 
-// Start Server
+// Start Server only after MongoDB connects
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();

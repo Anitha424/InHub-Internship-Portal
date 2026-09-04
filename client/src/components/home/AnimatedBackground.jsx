@@ -1,18 +1,18 @@
 import { motion } from "framer-motion";
 
-function AnimatedBackground() {
-  const stars = Array.from({ length: 120 }, (_, i) => ({
-    id: i,
-    left: Math.random() * 100,
-    top: Math.random() * 100,
-    size: Math.random() * 2 + 1,
-    duration: Math.random() * 8 + 8,
-    delay: Math.random() * 5,
-    driftX: Math.random() * 20 - 10,
-    driftY: Math.random() * 20 - 10,
-    opacity: Math.random() * 0.6 + 0.3,
-  }));
+const stars = Array.from({ length: 120 }, (_, i) => ({
+  id: i,
+  left: (i * 37.7) % 100,
+  top: (i * 61.3) % 100,
+  size: ((i * 17) % 10) / 10 + 1,
+  duration: ((i * 29) % 80) / 10 + 8,
+  delay: ((i * 13) % 50) / 10,
+  driftX: (i % 21) - 10,
+  driftY: ((i * 3) % 21) - 10,
+  opacity: ((i * 7) % 6) / 10 + 0.3,
+}));
 
+function AnimatedBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
 

@@ -52,7 +52,7 @@ function InternshipTable({ internships, onDelete, onEdit }) {
         <tbody>
           {filteredInternships.map((item) => (
             <tr
-              key={item._id}
+              key={item._id || item.id}
               className="border-b border-gray-800 hover:bg-gray-800 transition"
             >
               <td className="py-4">
@@ -89,7 +89,7 @@ function InternshipTable({ internships, onDelete, onEdit }) {
                   </button>
 
                   <button
-                    onClick={() => onDelete(item._id)}
+                    onClick={() => onDelete(item._id || item.id)}
                     className="bg-red-600 hover:bg-red-700 p-2 rounded-lg"
                   >
                     <Trash2 size={18} />
