@@ -9,7 +9,8 @@ import SearchSection from "./components/home/SearchSection";
 import SearchResults from "./pages/SearchResults";
 import InternshipDetails from "./pages/InternshipDetails";
 import AdminDashboard from "./pages/AdminDashboard";
-
+import Login from "./components/auth/Login";
+import Signup from "./components/auth/Signup";
 function Home() {
   return (
     <>
@@ -34,6 +35,8 @@ function App() {
         <Route path="/search" element={<SearchResults />} />
         <Route path="/internship/:id" element={<InternshipDetails />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
 
     </div>

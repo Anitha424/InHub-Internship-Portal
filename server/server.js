@@ -7,6 +7,8 @@ dotenv.config();
 const connectDB = require("./config/db");
 const internshipRoutes = require("./routes/internshipRoutes");
 
+const authRoutes = require("./routes/authRoutes");
+
 const app = express();
 
 // Middleware
@@ -21,6 +23,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use("/api/internships", internshipRoutes);
+app.use("/api/auth", authRoutes);
 
 // Home Route
 app.get("/", (req, res) => {
